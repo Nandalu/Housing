@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		041DB5101FA98607006E67D5 /* JinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041DB50F1FA98607006E67D5 /* JinModel.swift */; };
+		0433F2AA1FADF13A00A814B3 /* HousingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0433F2A91FADF13A00A814B3 /* HousingModel.swift */; };
+		0433F2AC1FAE992E00A814B3 /* HousingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0433F2AB1FAE992E00A814B3 /* HousingViewController.swift */; };
 		0460D5B61FA94210009CB085 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0460D5B51FA94210009CB085 /* AppDelegate.swift */; };
 		0460D5B81FA94210009CB085 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0460D5B71FA94210009CB085 /* MapViewController.swift */; };
 		0460D5BD1FA94210009CB085 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0460D5BC1FA94210009CB085 /* Assets.xcassets */; };
@@ -27,6 +29,8 @@
 
 /* Begin PBXFileReference section */
 		041DB50F1FA98607006E67D5 /* JinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JinModel.swift; sourceTree = "<group>"; };
+		0433F2A91FADF13A00A814B3 /* HousingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HousingModel.swift; sourceTree = "<group>"; };
+		0433F2AB1FAE992E00A814B3 /* HousingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HousingViewController.swift; sourceTree = "<group>"; };
 		0460D5B21FA94210009CB085 /* Housing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Housing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0460D5B51FA94210009CB085 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0460D5B71FA94210009CB085 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -79,7 +83,9 @@
 			children = (
 				0460D5B51FA94210009CB085 /* AppDelegate.swift */,
 				0460D5B71FA94210009CB085 /* MapViewController.swift */,
+				0433F2AB1FAE992E00A814B3 /* HousingViewController.swift */,
 				041DB50F1FA98607006E67D5 /* JinModel.swift */,
+				0433F2A91FADF13A00A814B3 /* HousingModel.swift */,
 				0460D5BC1FA94210009CB085 /* Assets.xcassets */,
 				0460D5BE1FA94210009CB085 /* LaunchScreen.storyboard */,
 				0460D5C11FA94210009CB085 /* Info.plist */,
@@ -201,6 +207,8 @@
 				0460D5B81FA94210009CB085 /* MapViewController.swift in Sources */,
 				0460D5B61FA94210009CB085 /* AppDelegate.swift in Sources */,
 				041DB5101FA98607006E67D5 /* JinModel.swift in Sources */,
+				0433F2AC1FAE992E00A814B3 /* HousingViewController.swift in Sources */,
+				0433F2AA1FADF13A00A814B3 /* HousingModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
