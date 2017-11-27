@@ -13,7 +13,7 @@ final class HousingViewController: UITableViewController {
     private let models : [HousingModel]
     private lazy var dateFormatter : DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .short
+        formatter.dateFormat = "yyyy/MM/dd"
         formatter.locale = Locale.current
         return formatter
     }()
@@ -76,11 +76,11 @@ final class HousingViewController: UITableViewController {
                 cell.detailTextLabel?.text = "\(Int(price * 3.3058 / 10000))萬"    // 每坪
             case 3:
                 cell.textLabel?.text = "建物移轉總面積(坪)"
-                cell.detailTextLabel?.text = "\(model.建物移轉總面積平方公尺 / 3.3058)"
+                cell.detailTextLabel?.text = String(format: "%.1f", model.建物移轉總面積平方公尺 / 3.3058)
             case 4:
                 cell.textLabel?.text = "總價(元)"
                 let price = model.總價元
-                cell.detailTextLabel?.text = "\(price / 10000)萬"
+                cell.detailTextLabel?.text = String(format: "%.1f 萬", price / 10000)
             case 5:
                 cell.textLabel?.text = "交易年月日"
                 let date = Date(timeIntervalSince1970: model.交易年月日)
