@@ -17,9 +17,11 @@ final class HousingViewController: UITableViewController {
         formatter.locale = Locale.current
         return formatter
     }()
+    private let viewDidDisappearHandler : (() -> Void)?
 
-    init(models: [HousingModel]) {
+    init(models: [HousingModel], viewDidDisappearHandler handler: (() -> Void)?) {
         self.models = models
+        self.viewDidDisappearHandler = handler
         super.init(style: .grouped)
 
         tableView.register(HousingTableViewCell.self, forCellReuseIdentifier: "UITableViewCellReuseIdentifier")
@@ -27,6 +29,13 @@ final class HousingViewController: UITableViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if let viewDidDisappearHandler = viewDidDisappearHandler {
+            viewDidDisappearHandler()
+        }
     }
 
     override func didReceiveMemoryWarning() {

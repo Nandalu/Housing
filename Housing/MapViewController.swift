@@ -190,7 +190,9 @@ extension MapViewController : MKMapViewDelegate {
             let housingModel = housingAnnotation.housingModel {
             models.append(housingModel)
         }
-        let housingVc = HousingViewController(models: models)
+        let housingVc = HousingViewController(models: models) {
+            mapView.deselectAnnotation(view.annotation, animated: true)
+        }
         // a trick to show vc after user seeing callout is shown
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { (timer) in
             self.show(housingVc, sender: self)
