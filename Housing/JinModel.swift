@@ -18,6 +18,7 @@ struct JinModel : Codable {
         let Lat : CLLocationDegrees
         let Lng : CLLocationDegrees
         let IsDeleted : Bool
+        let SKF64 : Float
         let User : UserModel
         let App : AppModel
         struct UserModel : Codable {

@@ -64,6 +64,12 @@ final class HousingViewController: UITableViewController {
         if section < models.count {
             let model = models[section]
             switch row {
+            case 2, 3, 4:
+                cell.detailTextLabel?.textColor = UIColor.hou_annotationColor
+            default:
+                cell.detailTextLabel?.textColor = .gray
+            }
+            switch row {
             case 0:
                 cell.textLabel?.text = "交易標的"
                 cell.detailTextLabel?.text = model.交易標的
@@ -71,16 +77,16 @@ final class HousingViewController: UITableViewController {
                 cell.textLabel?.text = "土地區段位置或建物區門牌"
                 cell.detailTextLabel?.text = model.土地區段位置或建物區門牌
             case 2:
-                cell.textLabel?.text = "單價(每坪)"
+                cell.textLabel?.text = "單價(元/每坪)"
                 let price = models[section].單價每平方公尺
-                cell.detailTextLabel?.text = "\(Int(price * 3.3058 / 10000))萬"    // 每坪
+                cell.detailTextLabel?.text = String(format: "%.1f 萬", price * 3.3058 / 10000) // 每坪
             case 3:
                 cell.textLabel?.text = "建物移轉總面積(坪)"
-                cell.detailTextLabel?.text = String(format: "%.1f", model.建物移轉總面積平方公尺 / 3.3058)
+                cell.detailTextLabel?.text = String(format: "%.1f 坪", model.建物移轉總面積平方公尺 / 3.3058)
             case 4:
                 cell.textLabel?.text = "總價(元)"
                 let price = model.總價元
-                cell.detailTextLabel?.text = String(format: "%.1f 萬", price / 10000)
+                cell.detailTextLabel?.text = String(format: "%.0f 萬", price / 10000)
             case 5:
                 cell.textLabel?.text = "交易年月日"
                 let date = Date(timeIntervalSince1970: model.交易年月日)

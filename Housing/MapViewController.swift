@@ -8,6 +8,11 @@
 import UIKit
 import MapKit
 
+extension UIColor {
+
+    static let hou_annotationColor = UIColor(red:0.99, green:0.34, blue:0.28, alpha:1.0)  // #FD5748
+}
+
 final class MapViewController: UIViewController {
 
     private var msgsDict = [String: Any]()
@@ -118,18 +123,19 @@ extension MapViewController : MKMapViewDelegate {
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        requestJinmaMsgs(within: mapView, paginationT: nil)
+        requestJinmaMsgs(within: mapView, paginationKey: nil)
     }
 
     // MARK: Housing data
-    private func requestJinmaMsgs(within mapView: MKMapView, paginationT: String?) {
+    private func requestJinmaMsgs(within mapView: MKMapView, paginationKey: String?) {
         let CLat = mapView.region.center.latitude
         let CLng = mapView.region.center.longitude
         let SLat = mapView.region.span.latitudeDelta
         let SLng = mapView.region.span.longitudeDelta
         var urlString = "https://www.jinma.io/MsgsByGeoAppUser?CLat=\(CLat)&CLng=\(CLng)&SLat=\(SLat)&SLng=\(SLng)&AppID=16VHVHiLd3NzX&UserID=128DEi3hheGXG"
-        if let Time = paginationT {
-            urlString += "&Time=\(Time)"
+        if let SortKey = paginationKey,
+            let SortKeyEncoded = SortKey.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            urlString += "&SKF64=\(SortKeyEncoded)"
         }
         guard let url = URL(string: urlString) else {
             showPrompt(msg: "[Error] URL failed: \(urlString)")
@@ -151,7 +157,7 @@ extension MapViewController : MKMapViewDelegate {
                 self.showPrompt(msg: "[Error] json decode failed")
                 return
             }
-            var lastMsgTime : String? = nil
+            var lastMsgSKF64 : String? = nil
             for msg in jinModel.Msgs {
                 if self.msgsDict[msg.ID] == nil {
                     self.msgsDict[msg.ID] = ""
@@ -166,10 +172,10 @@ extension MapViewController : MKMapViewDelegate {
                         mapView.addAnnotation(annotation)
                     }
                 }
-                lastMsgTime = "\(msg.Time)"
+                lastMsgSKF64 = "\(msg.SKF64)"
             }
-            if lastMsgTime != nil {
-                self.requestJinmaMsgs(within: mapView, paginationT: lastMsgTime)
+            if lastMsgSKF64 != nil {
+                self.requestJinmaMsgs(within: mapView, paginationKey: lastMsgSKF64)
             }
         }
         task.resume()
