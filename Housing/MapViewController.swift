@@ -184,6 +184,9 @@ extension MapViewController : MKMapViewDelegate {
     }
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if view.annotation is MKUserLocation {
+            return
+        }
         var models = [HousingModel]()
         if let cluster = view.annotation as? MKClusterAnnotation {
             for annotation in cluster.memberAnnotations {

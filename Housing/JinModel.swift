@@ -1,5 +1,5 @@
 //
-//  JinCodableModel.swift
+//  JinModel.swift
 //  Housing
 //
 //  Created by denkeni on 01/11/2017.
