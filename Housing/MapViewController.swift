@@ -168,8 +168,10 @@ extension MapViewController : MKMapViewDelegate {
                         annotation.housingModel = housingModel
                     }
                     annotation.housingModelRaw = msg.Body
-                    DispatchQueue.main.async {
-                        mapView.addAnnotation(annotation)
+                    if msg.IsDeleted != true {
+                        DispatchQueue.main.async {
+                            mapView.addAnnotation(annotation)
+                        }
                     }
                 }
                 lastMsgSKF64 = "\(msg.SKF64)"
