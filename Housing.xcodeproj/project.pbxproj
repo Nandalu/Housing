@@ -10,6 +10,7 @@
 		041DB5101FA98607006E67D5 /* JinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041DB50F1FA98607006E67D5 /* JinModel.swift */; };
 		0433F2AA1FADF13A00A814B3 /* HousingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0433F2A91FADF13A00A814B3 /* HousingModel.swift */; };
 		0433F2AC1FAE992E00A814B3 /* HousingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0433F2AB1FAE992E00A814B3 /* HousingViewController.swift */; };
+		045A71E81FF22804003885BB /* SearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045A71E71FF22804003885BB /* SearchResultTableViewController.swift */; };
 		0460D5B61FA94210009CB085 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0460D5B51FA94210009CB085 /* AppDelegate.swift */; };
 		0460D5B81FA94210009CB085 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0460D5B71FA94210009CB085 /* MapViewController.swift */; };
 		0460D5BD1FA94210009CB085 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0460D5BC1FA94210009CB085 /* Assets.xcassets */; };
@@ -32,6 +33,7 @@
 		0433F2A91FADF13A00A814B3 /* HousingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HousingModel.swift; sourceTree = "<group>"; };
 		0433F2AB1FAE992E00A814B3 /* HousingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HousingViewController.swift; sourceTree = "<group>"; };
 		043AB0F71FCC08CE00FACF86 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		045A71E71FF22804003885BB /* SearchResultTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewController.swift; sourceTree = "<group>"; };
 		0460D5B21FA94210009CB085 /* Housing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Housing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0460D5B51FA94210009CB085 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0460D5B71FA94210009CB085 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 			children = (
 				0460D5B51FA94210009CB085 /* AppDelegate.swift */,
 				0460D5B71FA94210009CB085 /* MapViewController.swift */,
+				045A71E71FF22804003885BB /* SearchResultTableViewController.swift */,
 				0433F2AB1FAE992E00A814B3 /* HousingViewController.swift */,
 				041DB50F1FA98607006E67D5 /* JinModel.swift */,
 				0433F2A91FADF13A00A814B3 /* HousingModel.swift */,
@@ -207,6 +210,7 @@
 			files = (
 				0460D5B81FA94210009CB085 /* MapViewController.swift in Sources */,
 				0460D5B61FA94210009CB085 /* AppDelegate.swift in Sources */,
+				045A71E81FF22804003885BB /* SearchResultTableViewController.swift in Sources */,
 				041DB5101FA98607006E67D5 /* JinModel.swift in Sources */,
 				0433F2AC1FAE992E00A814B3 /* HousingViewController.swift in Sources */,
 				0433F2AA1FADF13A00A814B3 /* HousingModel.swift in Sources */,

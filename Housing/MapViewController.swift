@@ -35,6 +35,18 @@ final class MapViewController: UIViewController {
     private lazy var locationManager : CLLocationManager = {
         return CLLocationManager()
     }()
+    private lazy var mapView : MKMapView = {
+        return MKMapView(frame: self.view.frame)
+    }()
+    private lazy var searchController : UISearchController = {
+        let searchResultTableViewController = SearchResultTableViewController(delegate: self)
+        let controller = UISearchController(searchResultsController: searchResultTableViewController)
+        controller.searchResultsUpdater = searchResultTableViewController
+        controller.hidesNavigationBarDuringPresentation = false
+        controller.dimsBackgroundDuringPresentation = true
+        controller.searchBar.placeholder = "搜尋地點"
+        return controller
+    }()
 
     // MARK: - UIViewController life cycle
 
@@ -42,12 +54,15 @@ final class MapViewController: UIViewController {
         super.viewDidLoad()
 
         // Set up MKMapView
-        let mapView = MKMapView(frame: view.frame)
         mapView.delegate = self
         mapView.mapType = .mutedStandard
         mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         mapView.showsUserLocation = true
         view.addSubview(mapView)
+
+        // Set up location search
+        navigationItem.titleView = searchController.searchBar
+        definesPresentationContext = true
 
         // Set up MKUserTrackingButton
         let button = MKUserTrackingButton(mapView: mapView)
@@ -77,28 +92,17 @@ final class MapViewController: UIViewController {
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: true)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: true)
-    }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-    /// Only for debug - show navigation bar to show prompt
     private func showPrompt(msg: String) {
         DispatchQueue.main.async {
             self.navigationItem.prompt = msg
-        }
-        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { (timer) in
-            self.navigationItem.prompt = nil
+            Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { (timer) in
+                self.navigationItem.prompt = nil
+            }
         }
     }
 }
@@ -189,7 +193,11 @@ extension MapViewController : MKMapViewDelegate {
             }
             let jsonDecoder = JSONDecoder()
             guard let jinModel = try? jsonDecoder.decode(JinModel.self, from: data) else {
-                self.showPrompt(msg: "[Error] json decode failed")
+                guard let errorModel = try? jsonDecoder.decode(JinErrorModel.self, from: data) else {
+                    self.showPrompt(msg: "[Error] json decode failed")
+                    return
+                }
+                self.showPrompt(msg: errorModel.Error)
                 return
             }
             var lastMsgSKF64 : String? = nil
@@ -212,7 +220,7 @@ extension MapViewController : MKMapViewDelegate {
                         mapView.addAnnotation(annotation)
                     }
                 }
-                lastMsgSKF64 = "\(msg.SKF64)"
+                lastMsgSKF64 = String(format: "%.0f", msg.SKF64)    // prevent scientific notation with Float
             }
             if lastMsgSKF64 != nil {
                 self.requestJinmaMsgs(within: mapView, paginationKey: lastMsgSKF64)
@@ -246,6 +254,23 @@ extension MapViewController : MKMapViewDelegate {
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { (timer) in
             self.show(housingVc, sender: self)
         }
+    }
+}
+
+// MARK: - SearchResultDelegate
+
+extension MapViewController : SearchResultDelegate {
+
+    func showSearchResultError(msg: String) {
+        showPrompt(msg: msg)
+    }
+
+    func didSelect(placemark: MKPlacemark) {
+        let name = placemark.name
+        searchController.searchBar.text = name
+        let coordinate = placemark.coordinate
+        let region = MKCoordinateRegionMakeWithDistance(coordinate, 5000.0, 5000.0)
+        mapView.setRegion(region, animated: true)
     }
 }
 

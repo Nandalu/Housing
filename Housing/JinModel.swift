@@ -35,3 +35,7 @@ struct JinModel : Codable {
         }
     }
 }
+
+struct JinErrorModel : Codable {
+    let Error : String
+}
