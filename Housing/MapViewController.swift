@@ -29,6 +29,9 @@ final class MapViewController: UIViewController {
         }
     }
     private var isFirstTimeUpdateUserLocation : Bool = true
+    private lazy var taiwanRegion : MKCoordinateRegion = {
+        return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 23.563533658012641, longitude: 120.99793200000008), span: MKCoordinateSpan(latitudeDelta: 3.6626503643275328, longitudeDelta: 2.0419336676933426))
+    }()
     private lazy var locationManager : CLLocationManager = {
         return CLLocationManager()
     }()
@@ -63,8 +66,14 @@ final class MapViewController: UIViewController {
         mapView.register(ClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier)
 
         // Location permission
-        if CLLocationManager.authorizationStatus() == .notDetermined {
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
+        case .denied:
+            // Move to Taiwan
+            mapView.setRegion(taiwanRegion, animated: true)
+        default:
+            break
         }
     }
 
@@ -103,8 +112,34 @@ extension MapViewController : MKMapViewDelegate {
         if isFirstTimeUpdateUserLocation {
             isFirstTimeUpdateUserLocation = false
             let userLocationCoordinate = userLocation.coordinate
-            let region = MKCoordinateRegionMakeWithDistance(userLocationCoordinate, 500.0, 500.0)
-            mapView.setRegion(region, animated: false)
+            let taiwanBroaderRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 23.563533658012641, longitude: 120.99793200000008), span: MKCoordinateSpan(latitudeDelta: 5.0, longitudeDelta: 5.0))
+            let isInTaiwan = isLocation(coordinate: userLocationCoordinate, within: taiwanBroaderRegion)
+            if isInTaiwan {
+                // Show user's location
+                let region = MKCoordinateRegionMakeWithDistance(userLocationCoordinate, 500.0, 500.0)
+                mapView.setRegion(region, animated: false)
+            } else {
+                // Move to Taiwan
+                mapView.setRegion(taiwanRegion, animated: true)
+            }
+            self.mapView(mapView, regionDidChangeAnimated: true)     // make sure data show up at first glance
+        }
+    }
+
+    private func isLocation(coordinate: CLLocationCoordinate2D, within region: MKCoordinateRegion) -> Bool {
+        var northWestCorner = CLLocationCoordinate2D()
+        var southEastCorner = CLLocationCoordinate2D()
+        northWestCorner.latitude  = region.center.latitude  + (region.span.latitudeDelta  / 2.0)
+        northWestCorner.longitude = region.center.longitude - (region.span.longitudeDelta / 2.0)
+        southEastCorner.latitude  = region.center.latitude  - (region.span.latitudeDelta  / 2.0)
+        southEastCorner.longitude = region.center.longitude + (region.span.longitudeDelta / 2.0)
+        if (coordinate.latitude  <= northWestCorner.latitude &&
+            coordinate.latitude  >= southEastCorner.latitude &&
+            coordinate.longitude >= northWestCorner.longitude &&
+            coordinate.longitude <= southEastCorner.longitude) {
+            return true
+        } else {
+            return false
         }
     }
 
