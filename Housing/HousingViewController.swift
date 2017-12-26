@@ -78,25 +78,33 @@ final class HousingViewController: UITableViewController {
                 cell.detailTextLabel?.text = model.土地區段位置或建物區門牌
             case 2:
                 cell.textLabel?.text = "單價(元/每坪)"
-                let price = models[section].單價每平方公尺
-                cell.detailTextLabel?.text = String(format: "%.1f 萬", price * 3.3058 / 10000) // 每坪
+                if let price = models[section].單價每平方公尺 {
+                    cell.detailTextLabel?.text = String(format: "%.1f 萬", price * 3.3058 / 10000) // 每坪
+                }
             case 3:
                 cell.textLabel?.text = "建物移轉總面積(坪)"
-                cell.detailTextLabel?.text = String(format: "%.1f 坪", model.建物移轉總面積平方公尺 / 3.3058)
+                if let areaInM2 = model.建物移轉總面積平方公尺 {
+                    cell.detailTextLabel?.text = String(format: "%.1f 坪", areaInM2 / 3.3058)
+                }
             case 4:
                 cell.textLabel?.text = "總價(元)"
-                let price = model.總價元
-                cell.detailTextLabel?.text = String(format: "%.0f 萬", price / 10000)
+                if let price = model.總價元 {
+                    cell.detailTextLabel?.text = String(format: "%.0f 萬", price / 10000)
+                }
             case 5:
                 cell.textLabel?.text = "交易年月日"
-                let date = Date(timeIntervalSince1970: model.交易年月日)
-                let dateString = self.dateFormatter.string(from: date)
-                cell.detailTextLabel?.text = dateString
+                if let tradingDate = model.交易年月日 {
+                    let date = Date(timeIntervalSince1970: tradingDate)
+                    let dateString = self.dateFormatter.string(from: date)
+                    cell.detailTextLabel?.text = dateString
+                }
             case 6:
                 cell.textLabel?.text = "建築完成年月"
-                let date = Date(timeIntervalSince1970: model.建築完成年月)
-                let dateString = dateFormatter.string(from: date)
-                cell.detailTextLabel?.text = dateString
+                if let builtDate = model.建築完成年月 {
+                    let date = Date(timeIntervalSince1970: builtDate)
+                    let dateString = dateFormatter.string(from: date)
+                    cell.detailTextLabel?.text = dateString
+                }
             case 7:
                 cell.textLabel?.text = "交易筆棟數"
                 cell.detailTextLabel?.text = model.交易筆棟數

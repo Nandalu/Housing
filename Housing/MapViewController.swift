@@ -163,15 +163,18 @@ extension MapViewController : MKMapViewDelegate {
                     self.msgsDict[msg.ID] = ""
                     let annotation = HousingPointAnnotation()
                     annotation.coordinate = CLLocationCoordinate2D(latitude: msg.Lat, longitude: msg.Lng)
-                    if let housingData = msg.Body.data(using: .utf8),
-                        let housingModel = try? jsonDecoder.decode(HousingModel.self, from: housingData) {
-                        annotation.housingModel = housingModel
+                    guard let housingData = msg.Body.data(using: .utf8),
+                        let housingModel = try? jsonDecoder.decode(HousingModel.self, from: housingData) else {
+                            assertionFailure()
+                            continue
                     }
+                    annotation.housingModel = housingModel
                     annotation.housingModelRaw = msg.Body
-                    if msg.IsDeleted != true {
-                        DispatchQueue.main.async {
-                            mapView.addAnnotation(annotation)
-                        }
+                    if housingModel.交易標的 == "車位" {
+                        continue    // remove 車位 from calculating 每坪單價 (車位 has no data for this)
+                    }
+                    DispatchQueue.main.async {
+                        mapView.addAnnotation(annotation)
                     }
                 }
                 lastMsgSKF64 = "\(msg.SKF64)"
@@ -219,46 +222,6 @@ private class HousingPointAnnotation : MKPointAnnotation {
     var housingModelRaw : String?
 }
 
-/*
-private class MarkerAnnotationView : MKMarkerAnnotationView {
-
-    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
-        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        canShowCallout = false
-        // Note: Calling didTapAnnotationView here reacts much faster than in setSelected: or mapView:didSelectAnnotationView
-        // For the size of this project, I don't care about MVC.
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapAnnotationView))
-        addGestureRecognizer(tapGestureRecognizer)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    @objc private func didTapAnnotationView() {
-        guard let delegate = UIApplication.shared.delegate as? AppDelegate, let rootVc = delegate.window?.rootViewController else {
-                return
-        }
-        var models = [HousingModel]()
-        if let cluster = annotation as? MKClusterAnnotation {
-            for annotation in cluster.memberAnnotations {
-                guard let housingAnnotaion = annotation as? HousingPointAnnotation,
-                    let housingModel = housingAnnotaion.housingModel else {
-                    assertionFailure()
-                    continue
-                }
-                models.append(housingModel)
-            }
-        } else if let housingAnnotation = annotation as? HousingPointAnnotation,
-            let housingModel = housingAnnotation.housingModel {
-            models.append(housingModel)
-        }
-        let housingVc = HousingViewController(models: models)
-        rootVc.show(housingVc, sender: self)
-    }
-}
- */
-
 private final class ClusterAnnotationView : MKMarkerAnnotationView {
 
     override var annotation: MKAnnotation? {
@@ -274,7 +237,9 @@ private final class ClusterAnnotationView : MKMarkerAnnotationView {
                     assertionFailure()
                     continue
                 }
-                totalPrice += housingModel.單價每平方公尺
+                if let price = housingModel.單價每平方公尺 {
+                    totalPrice += price
+                }
                 count += 1
             }
             if count == 0 {
@@ -296,8 +261,9 @@ private final class AnnotaionView : MKMarkerAnnotationView {
                 let housingModel = annotation.housingModel else {
                     return
             }
-            let price = housingModel.單價每平方公尺
-            self.glyphText = "\(Int(price * 3.3058 / 10000))萬"    // 每坪
+            if let price = housingModel.單價每平方公尺 {
+                self.glyphText = "\(Int(price * 3.3058 / 10000))萬"    // 每坪
+            }
         }
     }
 }
