@@ -110,7 +110,9 @@ final class HousingViewController: UITableViewController {
                 cell.detailTextLabel?.text = model.交易筆棟數
             case 8:
                 cell.textLabel?.text = "移轉層次 / 總樓層數"
-                cell.detailTextLabel?.text = "\(model.移轉層次) / \(model.總樓層數)"
+                if let level = model.移轉層次, let totalLevel = model.總樓層數 {
+                    cell.detailTextLabel?.text = "\(level) / \(totalLevel)"
+                }
             case 9:
                 cell.textLabel?.text = "建物型態"
                 cell.detailTextLabel?.text = model.建物型態
