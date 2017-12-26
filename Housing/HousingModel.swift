@@ -17,7 +17,7 @@ struct HousingModel : Codable {
     let 都市土地使用分區 : String?
     let 非都市土地使用分區 : String?
     let 非都市土地使用編定 : String?
-    let 交易年月日 : TimeInterval?
+    let 交易年月日 : TimeInterval
     let 交易筆棟數 : String?
     let 移轉層次 : String?
     let 總樓層數 : String?

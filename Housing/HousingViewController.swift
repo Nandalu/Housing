@@ -93,11 +93,9 @@ final class HousingViewController: UITableViewController {
                 }
             case 5:
                 cell.textLabel?.text = "交易年月日"
-                if let tradingDate = model.交易年月日 {
-                    let date = Date(timeIntervalSince1970: tradingDate)
-                    let dateString = self.dateFormatter.string(from: date)
-                    cell.detailTextLabel?.text = dateString
-                }
+                let date = Date(timeIntervalSince1970: model.交易年月日)
+                let dateString = self.dateFormatter.string(from: date)
+                cell.detailTextLabel?.text = dateString
             case 6:
                 cell.textLabel?.text = "建築完成年月"
                 if let builtDate = model.建築完成年月 {

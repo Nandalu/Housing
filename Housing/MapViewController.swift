@@ -235,14 +235,16 @@ extension MapViewController : MKMapViewDelegate {
         }
         var models = [HousingModel]()
         if let cluster = view.annotation as? MKClusterAnnotation {
+            var unsortedModels = [HousingModel]()
             for annotation in cluster.memberAnnotations {
                 guard let housingAnnotaion = annotation as? HousingPointAnnotation,
                     let housingModel = housingAnnotaion.housingModel else {
                         assertionFailure()
                         continue
                 }
-                models.append(housingModel)
+                unsortedModels.append(housingModel)
             }
+            models = unsortedModels.sorted(by: {$0.交易年月日 > $1.交易年月日})
         } else if let housingAnnotation = view.annotation as? HousingPointAnnotation,
             let housingModel = housingAnnotation.housingModel {
             models.append(housingModel)
