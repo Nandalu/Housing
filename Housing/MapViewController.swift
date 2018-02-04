@@ -30,7 +30,7 @@ final class MapViewController: UIViewController {
     }
     private var isFirstTimeUpdateUserLocation : Bool = true
     private lazy var taiwanRegion : MKCoordinateRegion = {
-        return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 23.563533658012641, longitude: 120.99793200000008), span: MKCoordinateSpan(latitudeDelta: 3.6626503643275328, longitudeDelta: 2.0419336676933426))
+        return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:25.040713, longitude: 121.517517), span: MKCoordinateSpan(latitudeDelta: 0.0025758876614681014, longitudeDelta: 0.013571977615356445))
     }()
     private lazy var locationManager : CLLocationManager = {
         return CLLocationManager()
