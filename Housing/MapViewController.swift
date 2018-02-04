@@ -100,7 +100,7 @@ final class MapViewController: UIViewController {
     private func showPrompt(msg: String) {
         DispatchQueue.main.async {
             self.navigationItem.prompt = msg
-            Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { (timer) in
+            Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { (timer) in
                 self.navigationItem.prompt = nil
             }
         }
@@ -166,7 +166,11 @@ extension MapViewController : MKMapViewDelegate {
     }
 
     // MARK: Housing data
-    private func requestJinmaMsgs(within mapView: MKMapView, paginationKey: String?) {
+    private func requestJinmaMsgs(within mapView: MKMapView, paginationKey: String?, paginationCount: UInt = 0) {
+        if paginationCount > 10 {
+            showPrompt(msg: "資料過多，僅顯示部份資訊；請放大地圖到更小區域。")
+            return
+        }
         let CLat = mapView.region.center.latitude
         let CLng = mapView.region.center.longitude
         let SLat = mapView.region.span.latitudeDelta
@@ -225,7 +229,7 @@ extension MapViewController : MKMapViewDelegate {
                 lastMsgSKF64 = String(format: "%f", msg.SKF64)
             }
             if !isFinished {
-                self.requestJinmaMsgs(within: mapView, paginationKey: lastMsgSKF64)
+                self.requestJinmaMsgs(within: mapView, paginationKey: lastMsgSKF64, paginationCount: paginationCount + 1)
             }
         }
         task.resume()
