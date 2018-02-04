@@ -10,7 +10,7 @@ import UIKit
 
 final class HousingViewController: UITableViewController {
 
-    private let models : [HousingModel]
+    private var models : [HousingModel]
     private lazy var dateFormatter : DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd"
@@ -20,15 +20,32 @@ final class HousingViewController: UITableViewController {
     private let viewDidDisappearHandler : (() -> Void)?
 
     init(models: [HousingModel], viewDidDisappearHandler handler: (() -> Void)?) {
-        self.models = models
+        self.models = HousingViewController.sorted(models: models)
         self.viewDidDisappearHandler = handler
         super.init(style: .grouped)
-
-        tableView.register(HousingTableViewCell.self, forCellReuseIdentifier: "UITableViewCellReuseIdentifier")
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let sortButton = UIButton(type: .system)
+        sortButton.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 44.0)
+        let sortButtonTitle : String
+        if let sortField = UserDefaults.standard.string(forKey: "SortField") {
+            sortButtonTitle = sortField
+        } else {
+            sortButtonTitle = "交易年月日↓"
+        }
+        sortButton.setTitle(sortButtonTitle, for: .normal)
+        sortButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
+        sortButton.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
+        navigationItem.titleView = sortButton
+
+        tableView.register(HousingTableViewCell.self, forCellReuseIdentifier: "UITableViewCellReuseIdentifier")
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -41,6 +58,53 @@ final class HousingViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+    // MARK: - Actions
+
+    @objc private func didTapSortButton(sender: UIButton) {
+        let actionSheet = UIAlertController(title: "排序方式", message: nil, preferredStyle: .actionSheet)
+        for value in ["建築完成年月↑", "建築完成年月↓", "總價元↑", "總價元↓", "交易年月日↑", "交易年月日↓"] {
+            let action = UIAlertAction(title: value, style: .default, handler: { (alertAction) in
+                sender.setTitle(value, for: .normal)
+                UserDefaults.standard.set(value, forKey: "SortField")
+                self.models = HousingViewController.sorted(models: self.models)
+                self.tableView.reloadData()
+            })
+            actionSheet.addAction(action)
+        }
+        let cancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        actionSheet.addAction(cancel)
+        let popPresenter = actionSheet.popoverPresentationController
+        popPresenter?.sourceRect = sender.frame
+        popPresenter?.sourceView = sender
+        present(actionSheet, animated: true, completion: nil)
+    }
+
+    /// return sorted model based on UserDefaults "SortField" value
+    private static func sorted(models: [HousingModel]) -> [HousingModel] {
+        let sortedModels : [HousingModel]
+        if let sortField = UserDefaults.standard.string(forKey: "SortField") {
+            switch sortField {
+            case "建築完成年月↑":
+                sortedModels = models.sorted(by: {$0.建築完成年月 < $1.建築完成年月})
+            case "建築完成年月↓":
+                sortedModels = models.sorted(by: {$0.建築完成年月 > $1.建築完成年月})
+            case "總價元↑":
+                sortedModels = models.sorted(by: {$0.總價元 < $1.總價元})
+            case "總價元↓":
+                sortedModels = models.sorted(by: {$0.總價元 > $1.總價元})
+            case "交易年月日↑":
+                sortedModels = models.sorted(by: {$0.交易年月日 < $1.交易年月日})
+            case "交易年月日↓":
+                sortedModels = models.sorted(by: {$0.交易年月日 > $1.交易年月日})
+            default:
+                sortedModels = models.sorted(by: {$0.交易年月日 > $1.交易年月日})
+            }
+        } else {
+            sortedModels = models.sorted(by: {$0.交易年月日 > $1.交易年月日})
+        }
+        return sortedModels
     }
 
     // MARK: - Table view data source
@@ -88,9 +152,7 @@ final class HousingViewController: UITableViewController {
                 }
             case 4:
                 cell.textLabel?.text = "總價(元)"
-                if let price = model.總價元 {
-                    cell.detailTextLabel?.text = String(format: "%.0f 萬", price / 10000)
-                }
+                cell.detailTextLabel?.text = String(format: "%.0f 萬", model.總價元 / 10000)
             case 5:
                 cell.textLabel?.text = "交易年月日"
                 let date = Date(timeIntervalSince1970: model.交易年月日)
@@ -98,11 +160,9 @@ final class HousingViewController: UITableViewController {
                 cell.detailTextLabel?.text = dateString
             case 6:
                 cell.textLabel?.text = "建築完成年月"
-                if let builtDate = model.建築完成年月 {
-                    let date = Date(timeIntervalSince1970: builtDate)
-                    let dateString = dateFormatter.string(from: date)
-                    cell.detailTextLabel?.text = dateString
-                }
+                let date = Date(timeIntervalSince1970: model.建築完成年月)
+                let dateString = dateFormatter.string(from: date)
+                cell.detailTextLabel?.text = dateString
             case 7:
                 cell.textLabel?.text = "交易筆棟數"
                 cell.detailTextLabel?.text = model.交易筆棟數
