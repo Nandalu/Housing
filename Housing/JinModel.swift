@@ -17,7 +17,7 @@ struct JinModel : Codable {
         let Body : String
         let Lat : CLLocationDegrees
         let Lng : CLLocationDegrees
-        let SKF64 : Float
+        let SKF64 : Double
         let User : UserModel
         let App : AppModel
         struct UserModel : Codable {

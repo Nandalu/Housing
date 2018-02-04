@@ -200,6 +200,7 @@ extension MapViewController : MKMapViewDelegate {
                 self.showPrompt(msg: errorModel.Error)
                 return
             }
+            var isFinished : Bool = true
             var lastMsgSKF64 : String? = nil
             for msg in jinModel.Msgs {
                 if self.msgsDict[msg.ID] == nil {
@@ -219,10 +220,11 @@ extension MapViewController : MKMapViewDelegate {
                     DispatchQueue.main.async {
                         mapView.addAnnotation(annotation)
                     }
+                    isFinished = false
                 }
-                lastMsgSKF64 = String(format: "%.0f", msg.SKF64)    // prevent scientific notation with Float
+                lastMsgSKF64 = String(format: "%f", msg.SKF64)
             }
-            if lastMsgSKF64 != nil {
+            if !isFinished {
                 self.requestJinmaMsgs(within: mapView, paginationKey: lastMsgSKF64)
             }
         }
