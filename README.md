@@ -5,6 +5,8 @@ Show prices and information of houses that were sold for, in Taiwan, a.k.a 實�
 
 ## Map UI
 
+[![screenshot of this app](https://i.imgur.com/cPDKLE6.png)](https://imgur.com/a/zKLfZ)
+
 This app applies iOS 11 built-in clustering APIs. Check out [WWDC 2017 Session 237: What's New in MapKit](https://developer.apple.com/videos/play/wwdc2017/237/).
 
 We have fired 2 bug reports ([35381219](https://openradar.appspot.com/radar?id=6130891516542976)、[36131654](https://openradar.appspot.com/radar?id=4944605980131328)) during the developement.
