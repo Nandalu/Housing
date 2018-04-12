@@ -77,7 +77,7 @@ final class MapViewController: UIViewController {
             button.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 0)])
 
         // Set up clustering
-        mapView.register(AnnotaionView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        mapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         mapView.register(ClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier)
 
         // Location permission
@@ -318,11 +318,11 @@ private final class ClusterAnnotationView : MKMarkerAnnotationView {
     }
 }
 
-private final class AnnotaionView : MKMarkerAnnotationView {
+private final class AnnotationView : MKMarkerAnnotationView {
 
     override var annotation: MKAnnotation? {
         didSet {
-            clusteringIdentifier = "AnnotaionView"
+            clusteringIdentifier = "AnnotationView"
             guard let annotation = annotation as? HousingPointAnnotation,
                 let housingModel = annotation.housingModel else {
                     return
